@@ -2,6 +2,8 @@
 bin/
 obj/
 publish/
+dist/
+node_modules/
 
 # User-specific files
 *.rsuser
@@ -16,3 +18,5 @@ publish/
 
 # Environment files
 .env
+.env.local
+.env.*.local
