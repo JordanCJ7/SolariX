@@ -1,0 +1,18 @@
+# Build results
+bin/
+obj/
+publish/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / VS Code
+.vscode/
+.vs/
+
+# Environment files
+.env
