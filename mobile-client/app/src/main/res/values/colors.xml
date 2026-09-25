@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Primary Colors -->
+    <color name="primary">#D97706</color>
+    <color name="primary_variant">#B45309</color>
+    <color name="primary_light">#FEF3C7</color>
+    <color name="primary_dark">#78350F</color>
+
+    <!-- Accent & Secondary Colors -->
+    <color name="secondary">#0D9488</color>
+    <color name="secondary_variant">#0F766E</color>
+    <color name="secondary_light">#CCFBF1</color>
+
+    <!-- Background and Surface Colors -->
+    <color name="background_light">#F8FAFC</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="background_dark">#0F172A</color>
+    <color name="surface_dark">#1E293B</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#64748B</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="status_pending">#D97706</color>
+    <color name="status_pending_bg">#FEF3C7</color>
+    <color name="status_approved">#059669</color>
+    <color name="status_approved_bg">#D1FAE5</color>
+    <color name="status_completed">#2563EB</color>
+    <color name="status_completed_bg">#DBEAFE</color>
+    <color name="status_cancelled">#DC2626</color>
+    <color name="status_cancelled_bg">#FEE2E2</color>
+
+    <!-- UI Component & Utility Colors -->
+    <color name="divider">#E2E8F0</color>
+    <color name="card_stroke">#CBD5E1</color>
+    <color name="chip_bg">#F1F5F9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="ripple_color">#20000000</color>
+</resources>
