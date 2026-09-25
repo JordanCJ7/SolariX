@@ -16,3 +16,16 @@ publish/
 
 # Environment files
 .env
+
+# Android Build & Local Config
+.gradle/
+**/build/
+*.apk
+*.aab
+local.properties
+.cxx/
+captures/
+
+# Node / Web Client
+node_modules/
+dist/

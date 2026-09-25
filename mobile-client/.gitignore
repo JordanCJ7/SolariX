@@ -1,0 +1,30 @@
+# Built application and library artifacts
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Gradle files and cache
+.gradle/
+build/
+app/build/
+
+# Local developer SDK configuration
+local.properties
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Keystore and signing files
+*.jks
+*.keystore
+
+# OS-generated files
+.DS_Store
+Thumbs.db
