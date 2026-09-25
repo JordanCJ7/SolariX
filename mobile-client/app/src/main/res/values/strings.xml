@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">SolariX</string>
+    <string name="google_maps_key" translatable="false">YOUR_GOOGLE_MAPS_API_KEY_HERE</string>
+
+    <!-- General Navigation & Actions -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit">Edit</string>
+    <string name="refresh">Refresh</string>
+    <string name="close">Close</string>
+
+    <!-- Auth Strings -->
+    <string name="title_login">Welcome to SolariX</string>
+    <string name="subtitle_login">Smart Solar Microgrid Energy Trading Platform</string>
+    <string name="hint_identifier">NIC or Email Address</string>
+    <string name="hint_password">Password</string>
+    <string name="prompt_register_prosumer">New Prosumer? Register Account</string>
+    <string name="title_register">Prosumer Registration</string>
+    <string name="subtitle_register">Join the decentralised clean energy microgrid</string>
+    <string name="hint_nic">National Identity Card (NIC)</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_email">Email Address</string>
+    <string name="hint_phone">Phone Number</string>
+    <string name="hint_address">Physical Address</string>
+    <string name="hint_capacity">Solar Capacity (kW)</string>
+
+    <!-- Prosumer Dashboard -->
+    <string name="dashboard_prosumer_title">Prosumer Portal</string>
+    <string name="card_pending_bookings">Pending Bookings</string>
+    <string name="card_approved_bookings">Approved Bookings</string>
+    <string name="btn_create_booking">Book Energy Slot</string>
+    <string name="btn_booking_history">My Bookings History</string>
+    <string name="btn_station_map">Nearby Microgrid Hubs</string>
+    <string name="btn_profile">Profile &amp; Account</string>
+
+    <!-- Booking Flow -->
+    <string name="title_create_booking">Reserve Energy Slot</string>
+    <string name="title_edit_booking">Update Booking</string>
+    <string name="select_station">Select Solar Station Hub</string>
+    <string name="select_date">Select Slot Date</string>
+    <string name="select_slot">Select Time Slot</string>
+    <string name="label_trade_type">Trade Mode</string>
+    <string name="trade_dropoff">Drop Off (Sell Solar Energy)</string>
+    <string name="trade_charge">Charge (Draw Grid Energy)</string>
+    <string name="label_energy_amount">Energy Volume (kW)</string>
+    <string name="booking_summary_title">Booking Confirmation</string>
+    <string name="view_qr_code">View Secure QR Code</string>
+
+    <!-- Operator Strings -->
+    <string name="operator_dashboard_title">Grid Operator Console</string>
+    <string name="btn_scan_qr">Scan Prosumer QR Code</string>
+    <string name="btn_operator_map">View Microgrid Stations</string>
+    <string name="title_qr_scanner">Scan Dispatch QR Code</string>
+    <string name="title_job_completion">Finalize Energy Transaction</string>
+    <string name="label_delivered_energy">Delivered Energy (kWh)</string>
+    <string name="label_operator_notes">Operational Notes</string>
+    <string name="btn_complete_transfer">Verify &amp; Finalize Trade</string>
+
+    <!-- Map & Location -->
+    <string name="title_stations_map">Microgrid Station Network</string>
+    <string name="map_legend">Active Solar Charging &amp; Drop-off Hubs</string>
+</resources>
