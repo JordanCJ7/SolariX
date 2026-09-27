@@ -57,7 +57,7 @@
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/logout"
-                    android:src="@android:drawable/ic_lock_power_off"
+                    android:src="@drawable/ic_logout"
                     app:tint="@color/status_cancelled" />
             </RelativeLayout>
 
