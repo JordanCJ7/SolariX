@@ -25,8 +25,6 @@
         <item name="cornerRadius">10dp</item>
         <item name="android:textColor">@color/text_on_primary</item>
         <item name="backgroundTint">@color/primary</item>
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingBottom">14dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">15sp</item>
     </style>
@@ -35,8 +33,6 @@
         <item name="cornerRadius">10dp</item>
         <item name="android:textColor">@color/primary</item>
         <item name="strokeColor">@color/primary</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
     </style>
