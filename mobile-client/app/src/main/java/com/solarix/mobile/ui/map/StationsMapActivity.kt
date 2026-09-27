@@ -105,6 +105,10 @@ class StationsMapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setupListeners() {
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         binding.btnRefreshMap.setOnClickListener {
             loadStationMarkers()
         }
