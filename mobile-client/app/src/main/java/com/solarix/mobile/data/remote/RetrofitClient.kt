@@ -67,18 +67,23 @@ object RetrofitClient {
         return try {
             val errorBody = response.errorBody()?.string()
             if (!errorBody.isNullOrBlank()) {
-                val json = Gson().fromJson(errorBody, JsonObject::class.java)
-                when {
-                    json.has("message") -> json.get("message").asString
-                    json.has("error") -> json.get("error").asString
-                    json.has("title") -> json.get("title").asString
-                    else -> errorBody
+                try {
+                    val json = Gson().fromJson(errorBody, JsonObject::class.java)
+                    when {
+                        json.has("message") -> json.get("message").asString
+                        json.has("error") -> json.get("error").asString
+                        json.has("title") -> json.get("title").asString
+                        else -> errorBody
+                    }
+                } catch (e: Exception) {
+                    // Fallback to raw string if it's not a JSON object
+                    errorBody
                 }
             } else {
                 "HTTP ${response.code()}: ${response.message()}"
             }
         } catch (e: Exception) {
-            "Error: ${e.localizedMessage ?: "Unexpected server error"}"
+            "Error: ${e.localizedMessage ?: "Unexpected error parsing response"}"
         }
     }
 }
