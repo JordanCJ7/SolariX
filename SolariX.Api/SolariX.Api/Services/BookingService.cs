@@ -276,14 +276,23 @@ namespace SolariX.Api.Services
 
             // Verify operator identity and role
             var cleanOperatorId = request.OperatorId.Trim().ToUpperInvariant();
-            var operatorUser = await _context.Users.Find(u => u.NIC == cleanOperatorId || u.Id == request.OperatorId).FirstOrDefaultAsync();
+            bool isOpObjectId = MongoDB.Bson.ObjectId.TryParse(request.OperatorId, out _);
+            
+            var operatorUser = isOpObjectId 
+                ? await _context.Users.Find(u => u.NIC == cleanOperatorId || u.Id == request.OperatorId).FirstOrDefaultAsync()
+                : await _context.Users.Find(u => u.NIC == cleanOperatorId).FirstOrDefaultAsync();
+
             if (operatorUser == null || operatorUser.Role != UserRole.GridOperator)
             {
                 throw new UnauthorizedAccessException("Forbidden: Only users with the GridOperator role are authorized to verify and finalize energy transfers.");
             }
 
             // Find reservation and verify Approved status
-            var reservation = await _context.EnergyReservations.Find(r => (r.Id == reservationId || r.ReservationNumber == reservationId) && r.ProsumerNIC == prosumerNic).FirstOrDefaultAsync();
+            bool isResObjectId = MongoDB.Bson.ObjectId.TryParse(reservationId, out _);
+            var reservation = isResObjectId
+                ? await _context.EnergyReservations.Find(r => (r.Id == reservationId || r.ReservationNumber == reservationId) && r.ProsumerNIC == prosumerNic).FirstOrDefaultAsync()
+                : await _context.EnergyReservations.Find(r => r.ReservationNumber == reservationId && r.ProsumerNIC == prosumerNic).FirstOrDefaultAsync();
+
             if (reservation == null)
             {
                 throw new KeyNotFoundException($"No active reservation found matching identifier '{reservationId}'.");

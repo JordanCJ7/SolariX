@@ -106,6 +106,10 @@ class BookingHistoryActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        binding.btnBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         binding.swipeRefreshBookings.setOnRefreshListener {
             loadBookings()
         }
