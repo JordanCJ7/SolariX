@@ -17,6 +17,7 @@ import {
   Zap,
   Radio,
   CheckCircle2,
+  ShieldAlert,
 } from 'lucide-react';
 
 const BackofficeDashboard = () => {
@@ -80,6 +81,14 @@ const BackofficeDashboard = () => {
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh Metrics</span>
             </button>
+
+            <Link
+              to="/backoffice/staff"
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-bold text-slate-100 bg-slate-800 hover:bg-slate-700 transition-colors shadow-md border border-slate-700"
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Manage Staff</span>
+            </Link>
 
             <Link
               to="/backoffice/nodes"

@@ -11,6 +11,7 @@ import Unauthorized from './pages/Unauthorized';
 import BackofficeDashboard from './pages/backoffice/BackofficeDashboard';
 import ProsumerManagement from './pages/backoffice/ProsumerManagement';
 import NodeManagement from './pages/backoffice/NodeManagement';
+import StaffManagement from './pages/backoffice/StaffManagement';
 import OperatorDashboard from './pages/operator/OperatorDashboard';
 import SlotManagement from './pages/operator/SlotManagement';
 
@@ -49,6 +50,14 @@ function App() {
                 element={
                   <ProtectedRoute allowedRoles={['Backoffice']}>
                     <NodeManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/backoffice/staff"
+                element={
+                  <ProtectedRoute allowedRoles={['Backoffice']}>
+                    <StaffManagement />
                   </ProtectedRoute>
                 }
               />

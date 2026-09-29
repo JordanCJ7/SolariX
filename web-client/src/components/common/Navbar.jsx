@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Sun, Zap, Shield, Cpu, LogOut, LayoutDashboard, Users, Radio } from 'lucide-react';
+import { Sun, Zap, Shield, Cpu, LogOut, LayoutDashboard, Users, Radio, ShieldAlert } from 'lucide-react';
 
 const Navbar = () => {
   const { user, isAuthenticated, isBackoffice, isGridOperator, logout } = useAuth();
@@ -71,6 +71,17 @@ const Navbar = () => {
                   >
                     <Cpu className="w-4 h-4" />
                     <span>Microgrid Nodes</span>
+                  </Link>
+                  <Link
+                    to="/backoffice/staff"
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                      isActive('/backoffice/staff')
+                        ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                        : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    }`}
+                  >
+                    <ShieldAlert className="w-4 h-4" />
+                    <span>Staff</span>
                   </Link>
                 </>
               )}
