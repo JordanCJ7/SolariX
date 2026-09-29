@@ -14,8 +14,10 @@ publish/
 .vscode/
 .vs/
 
-# Environment files
+# Environment and local settings
 .env
+**/appsettings.Development.json
+**/appsettings.Local.json
 
 # Android Build & Local Config
 .gradle/
