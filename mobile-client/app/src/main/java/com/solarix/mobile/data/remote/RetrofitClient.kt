@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     // Default base URL targeting the IIS / Kestrel backend on the host machine from the Android emulator
-    private const val DEFAULT_BASE_URL = "http://10.0.2.2:5000/api/"
+    private const val DEFAULT_BASE_URL = "http://10.0.2.2:5119/api/"
 
     @Volatile
     private var apiService: ApiService? = null

@@ -138,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Server: http://10.0.2.2:5000/api/ (Tap to edit)"
+                    android:text="Server: http://10.0.2.2:5119/api/ (Tap to edit)"
                     android:textColor="@color/secondary"
                     android:textSize="12sp" />
 
