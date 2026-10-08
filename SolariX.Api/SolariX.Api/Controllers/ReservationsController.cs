@@ -127,6 +127,31 @@ namespace SolariX.Api.Controllers
         }
 
         /// <summary>
+        /// Approves a Pending energy reservation.
+        /// </summary>
+        [HttpPost("{id}/approve")]
+        [ProducesResponseType(typeof(ReservationResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Approve(string id, [FromQuery] string? approverNic = null)
+        {
+            // Inline: Transitions a reservation from Pending to Approved so that the prosumer's transaction QR code can be dispatched.
+            try
+            {
+                var approved = await _bookingService.ApproveReservationAsync(id, approverNic ?? "OPERATOR");
+                return Ok(approved);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = "InvalidOperation", message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = "NotFound", message = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Grid Operator mode: Verifies QR token, confirms Approved status, validates GridOperator role, and completes trade.
         /// </summary>
         [HttpPost("verify-and-complete")]

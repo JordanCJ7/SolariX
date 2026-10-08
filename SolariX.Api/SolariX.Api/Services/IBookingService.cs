@@ -14,6 +14,7 @@ namespace SolariX.Api.Services
         Task<ReservationResponse> CreateReservationAsync(CreateReservationRequest request);
         Task<ReservationResponse> UpdateReservationAsync(string reservationId, string prosumerNic, UpdateReservationRequest request);
         Task<ReservationResponse> CancelReservationAsync(string reservationId, CancelReservationRequest request);
+        Task<ReservationResponse> ApproveReservationAsync(string reservationId, string approverNic);
         Task<ReservationResponse> VerifyAndCompleteAsync(VerifyAndCompleteRequest request);
         Task<ReservationResponse> FinalizeTransferAsync(FinalizeTransferRequest request);
         Task<ReservationResponse?> GetReservationByIdAsync(string id);

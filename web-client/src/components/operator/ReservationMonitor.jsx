@@ -6,6 +6,7 @@ const ReservationMonitor = ({
   reservations = [],
   loading = false,
   onVerifyAndComplete,
+  onApproveReservation,
   operatorNic = '',
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -203,7 +204,15 @@ const ReservationMonitor = ({
                   </td>
                   <td className="py-3.5 px-4">{getStatusBadge(res.status)}</td>
                   <td className="py-3.5 px-4 text-right">
-                    {res.status === 'Approved' ? (
+                    {res.status === 'Pending' ? (
+                      <button
+                        onClick={() => onApproveReservation && onApproveReservation(res.id)}
+                        className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 transition-colors"
+                      >
+                        <CheckCircle className="w-3.5 h-3.5" />
+                        <span>Approve</span>
+                      </button>
+                    ) : res.status === 'Approved' ? (
                       <button
                         onClick={() => handleOpenCompleteModal(res)}
                         className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition-colors"

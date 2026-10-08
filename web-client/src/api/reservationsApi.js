@@ -24,6 +24,11 @@ export const reservationsApi = {
       reason,
     });
   },
+  approveReservation: (id, approverNic) => {
+    return axiosClient.post(`/reservations/${id}/approve`, null, {
+      params: { approverNic },
+    });
+  },
   verifyAndComplete: (data) => {
     return axiosClient.post('/reservations/verify-and-complete', data);
   },

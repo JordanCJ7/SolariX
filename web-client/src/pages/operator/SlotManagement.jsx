@@ -109,6 +109,20 @@ const SlotManagement = () => {
     }
   };
 
+  // Approve Reservation handler
+  const handleApproveReservation = async (reservationId) => {
+    try {
+      await reservationsApi.approveReservation(reservationId, user?.nic || 'OPERATOR');
+      setToast({
+        type: 'success',
+        message: 'Reservation approved successfully. Prosumer QR token is now active.',
+      });
+      fetchReservations();
+    } catch (err) {
+      setToast({ type: 'error', message: err.message || 'Failed to approve reservation.' });
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
@@ -141,6 +155,7 @@ const SlotManagement = () => {
         reservations={reservations}
         loading={loadingReservations}
         onVerifyAndComplete={handleVerifyAndComplete}
+        onApproveReservation={handleApproveReservation}
         operatorNic={user?.nic || ''}
       />
     </div>

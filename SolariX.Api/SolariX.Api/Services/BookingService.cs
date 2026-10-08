@@ -107,7 +107,7 @@ namespace SolariX.Api.Services
                 EndTime = DateTime.SpecifyKind(slot.SlotDate.Date.Add(slot.EndTime.TimeOfDay), DateTimeKind.Utc),
                 EnergyAmountKW = request.EnergyAmountKW,
                 TradeType = request.TradeType ?? "DropOff",
-                Status = ReservationStatus.Approved,
+                Status = ReservationStatus.Pending,
                 QrCodeToken = qrToken,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -257,6 +257,29 @@ namespace SolariX.Api.Services
             reservation.Status = ReservationStatus.Cancelled;
             reservation.CancellationReason = request.Reason ?? "Cancelled by prosumer";
             reservation.CancelledAt = DateTime.UtcNow;
+            reservation.UpdatedAt = DateTime.UtcNow;
+
+            await _context.EnergyReservations.ReplaceOneAsync(r => r.Id == reservation.Id, reservation);
+
+            var station = await _context.SolarStationInfo.Find(s => s.Id == reservation.StationId).FirstOrDefaultAsync();
+            return MapToResponse(reservation, station?.StationName ?? "Solar Station");
+        }
+
+        public async Task<ReservationResponse> ApproveReservationAsync(string reservationId, string approverNic)
+        {
+            // Inline: Approves a Pending energy reservation, enabling secure QR dispatch for prosumer check-in.
+            var reservation = await _context.EnergyReservations.Find(r => r.Id == reservationId).FirstOrDefaultAsync();
+            if (reservation == null)
+            {
+                throw new KeyNotFoundException($"Reservation with ID '{reservationId}' was not found.");
+            }
+
+            if (reservation.Status != ReservationStatus.Pending)
+            {
+                throw new InvalidOperationException($"Cannot approve reservation with current status '{reservation.Status}'. Only Pending reservations can be approved.");
+            }
+
+            reservation.Status = ReservationStatus.Approved;
             reservation.UpdatedAt = DateTime.UtcNow;
 
             await _context.EnergyReservations.ReplaceOneAsync(r => r.Id == reservation.Id, reservation);
