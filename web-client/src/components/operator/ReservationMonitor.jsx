@@ -92,7 +92,8 @@ const ReservationMonitor = ({
   const formatDateTime = (isoString) => {
     if (!isoString) return '--';
     const d = new Date(isoString);
-    return `${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+    if (isNaN(d.getTime())) return isoString;
+    return `${d.toLocaleDateString(undefined, { timeZone: 'UTC' })} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'UTC' })}`;
   };
 
   return (
