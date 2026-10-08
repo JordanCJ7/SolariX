@@ -94,7 +94,7 @@ class EditBookingActivity : AppCompatActivity() {
                 displaySlots.addAll(slots.map {
                     val start = it.startTime.split("T").lastOrNull()?.take(5) ?: it.startTime
                     val end = it.endTime.split("T").lastOrNull()?.take(5) ?: it.endTime
-                    "$start - $end (Avail: ${it.availableCapacityKW} kW)"
+                    "$start - $end (Quota: ${it.availableCapacityKW} kW)"
                 })
 
                 val adapter = ArrayAdapter(this@EditBookingActivity, android.R.layout.simple_spinner_dropdown_item, displaySlots)

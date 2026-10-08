@@ -130,7 +130,7 @@ const SlotScheduleList = ({
                 </div>
 
                 <div className="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Available Cap:</span>
+                  <span className="text-slate-400">Bookable Quota:</span>
                   <span className="font-bold text-emerald-400 flex items-center gap-1">
                     <Zap className="w-3.5 h-3.5" />
                     {slot.availableCapacityKW} / {slot.maxCapacityKW} kW
