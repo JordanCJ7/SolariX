@@ -132,8 +132,8 @@ const Navbar = () => {
                   </div>
                 )}
 
-                <span className="hidden sm:inline text-xs text-slate-400 font-mono">
-                  {user?.nic}
+                <span className="hidden sm:inline text-xs font-semibold text-slate-200">
+                  {user?.fullName || user?.nic}
                 </span>
 
                 <button
