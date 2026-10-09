@@ -11,6 +11,7 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
     longitude: 79.8612,
     capacityKWh: 150,
     totalBatterySlots: 20,
+    availableBatterySlots: 20,
     operationalHours: '06:00 - 20:00',
     contactNumber: '+94112400000',
   });
@@ -25,6 +26,10 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
         longitude: initialData.longitude || 79.8612,
         capacityKWh: initialData.capacityKWh || 150,
         totalBatterySlots: initialData.totalBatterySlots || 20,
+        availableBatterySlots:
+          initialData.availableBatterySlots !== undefined && initialData.availableBatterySlots > 0
+            ? initialData.availableBatterySlots
+            : (initialData.totalBatterySlots || 20),
         operationalHours: initialData.operationalHours || '06:00 - 20:00',
         contactNumber: initialData.contactNumber || '',
       });
@@ -37,6 +42,7 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
         longitude: 79.8612,
         capacityKWh: 150,
         totalBatterySlots: 20,
+        availableBatterySlots: 20,
         operationalHours: '06:00 - 20:00',
         contactNumber: '+94112400000',
       });
@@ -148,7 +154,7 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
         </div>
 
         {/* Capacity and Battery Slots */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
               <Battery className="w-3.5 h-3.5 text-amber-400" />
@@ -167,7 +173,7 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
           <div>
             <label className="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
               <Battery className="w-3.5 h-3.5 text-emerald-400" />
-              Total Battery Slots
+              Total Slots
             </label>
             <input
               type="number"
@@ -176,6 +182,22 @@ const StationModal = ({ isOpen, onClose, onSubmit, initialData = null, loading =
               name="totalBatterySlots"
               required
               value={formData.totalBatterySlots}
+              onChange={handleChange}
+              className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/70"
+            />
+          </div>
+          <div>
+            <label className="block text-slate-300 font-semibold mb-1 flex items-center gap-1.5">
+              <Battery className="w-3.5 h-3.5 text-sky-400" />
+              Available Slots
+            </label>
+            <input
+              type="number"
+              min="0"
+              max={formData.totalBatterySlots || 500}
+              name="availableBatterySlots"
+              required
+              value={formData.availableBatterySlots}
               onChange={handleChange}
               className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/70"
             />

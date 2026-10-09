@@ -44,7 +44,7 @@ namespace SolariX.Api.DTOs
         public double Longitude { get; set; }
         public double CapacityKWh { get; set; }
         public int TotalBatterySlots { get; set; }
-        public int AvailableBatterySlots { get; set; }
+        public int? AvailableBatterySlots { get; set; }
         public string OperationalHours { get; set; } = "06:00 - 20:00";
         public string ContactNumber { get; set; } = string.Empty;
         public bool? IsActive { get; set; }

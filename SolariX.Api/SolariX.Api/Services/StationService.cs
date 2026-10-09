@@ -72,14 +72,19 @@ namespace SolariX.Api.Services
                 }
             }
 
+            var newTotalSlots = request.TotalBatterySlots > 0 ? request.TotalBatterySlots : station.TotalBatterySlots;
+            var newAvailableSlots = request.AvailableBatterySlots.HasValue && request.AvailableBatterySlots.Value >= 0
+                ? Math.Min(request.AvailableBatterySlots.Value, newTotalSlots)
+                : (station.AvailableBatterySlots == 0 ? newTotalSlots : Math.Min(station.AvailableBatterySlots, newTotalSlots));
+
             var update = Builders<SolarStationInfo>.Update
                 .Set(s => s.StationName, string.IsNullOrWhiteSpace(request.StationName) ? station.StationName : request.StationName.Trim())
                 .Set(s => s.LocationName, string.IsNullOrWhiteSpace(request.LocationName) ? station.LocationName : request.LocationName.Trim())
                 .Set(s => s.Latitude, request.Latitude != 0 ? request.Latitude : station.Latitude)
                 .Set(s => s.Longitude, request.Longitude != 0 ? request.Longitude : station.Longitude)
                 .Set(s => s.CapacityKWh, request.CapacityKWh > 0 ? request.CapacityKWh : station.CapacityKWh)
-                .Set(s => s.TotalBatterySlots, request.TotalBatterySlots > 0 ? request.TotalBatterySlots : station.TotalBatterySlots)
-                .Set(s => s.AvailableBatterySlots, request.AvailableBatterySlots >= 0 ? request.AvailableBatterySlots : station.AvailableBatterySlots)
+                .Set(s => s.TotalBatterySlots, newTotalSlots)
+                .Set(s => s.AvailableBatterySlots, newAvailableSlots)
                 .Set(s => s.OperationalHours, string.IsNullOrWhiteSpace(request.OperationalHours) ? station.OperationalHours : request.OperationalHours.Trim())
                 .Set(s => s.ContactNumber, string.IsNullOrWhiteSpace(request.ContactNumber) ? station.ContactNumber : request.ContactNumber.Trim())
                 .Set(s => s.IsActive, request.IsActive ?? station.IsActive)
