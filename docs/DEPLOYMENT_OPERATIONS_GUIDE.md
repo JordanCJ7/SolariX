@@ -67,6 +67,38 @@ Use these commands anytime to start, stop, or restart the server without touchin
 | **Stop All IIS Services** | `net stop w3svc` | Turns off the entire Windows IIS service. |
 | **Start All IIS Services** | `net start w3svc` | Turns on the Windows IIS service. |
 
+### How to Update Deployed IIS Server After Code Changes
+
+When you modify backend controllers, services, or models, the published binaries in `SolariX.Api/publish` must be updated and IIS recycled:
+
+#### Step 1: Re-publish the API
+Run from the repository root:
+```powershell
+dotnet publish SolariX.Api\SolariX.Api\SolariX.Api.csproj -c Release -o SolariX.Api\publish
+```
+
+#### Step 2: Recycle or Restart IIS (Run in PowerShell as Administrator)
+Choose one of the following to reload the new DLLs:
+
+- **Option A — Recycle AppPool (Zero Downtime / Recommended)**:
+  ```powershell
+  & "C:\Windows\System32\inetsrv\appcmd.exe" recycle apppool "SolariXAppPool"
+  ```
+- **Option B — Quick Restart of IIS Site**:
+  ```powershell
+  & "C:\Windows\System32\inetsrv\appcmd.exe" stop site "SolariXApi"
+  & "C:\Windows\System32\inetsrv\appcmd.exe" start site "SolariXApi"
+  ```
+- **Option C — Full IIS Service Reset**:
+  ```powershell
+  iisreset
+  ```
+
+#### One-Liner Script (Build, Publish & Recycle)
+```powershell
+dotnet publish SolariX.Api\SolariX.Api\SolariX.Api.csproj -c Release -o SolariX.Api\publish; & "C:\Windows\System32\inetsrv\appcmd.exe" recycle apppool "SolariXAppPool"
+```
+
 ---
 
 ## 4. React Web Client (Step 3)
