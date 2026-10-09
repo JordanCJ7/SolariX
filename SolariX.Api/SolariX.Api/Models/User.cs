@@ -78,7 +78,7 @@ namespace SolariX.Api.Models
                 PhoneNumber = phone.Trim(),
                 PasswordHash = passwordHash,
                 Role = UserRole.Prosumer,
-                Status = AccountStatus.Active,
+                Status = AccountStatus.PendingApproval,
                 Address = address.Trim(),
                 SolarCapacityKW = solarCapacityKW,
                 CreatedAt = DateTime.UtcNow,

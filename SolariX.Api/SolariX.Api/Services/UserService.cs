@@ -42,6 +42,11 @@ namespace SolariX.Api.Services
                 return null;
             }
 
+            if (user.Status == AccountStatus.PendingApproval)
+            {
+                throw new InvalidOperationException("Your prosumer account is currently pending Backoffice verification. Please await administrative approval before logging in.");
+            }
+
             if (user.Status == AccountStatus.Deactivated)
             {
                 throw new InvalidOperationException("This account is deactivated. Please contact Backoffice administration for reactivation.");

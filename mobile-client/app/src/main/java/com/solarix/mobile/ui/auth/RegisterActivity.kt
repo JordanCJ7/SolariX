@@ -68,8 +68,8 @@ class RegisterActivity : AppCompatActivity() {
             result.onSuccess { user ->
                 AlertDialog.Builder(this@RegisterActivity)
                     .setTitle("Registration Submitted")
-                    .setMessage("Your prosumer account with NIC '${user.nic}' has been created with status '${user.status}'. You may now log in.")
-                    .setPositiveButton("Sign In") { _, _ ->
+                    .setMessage("Your prosumer account with NIC '${user.nic}' has been created with status 'Pending Approval'. A Backoffice officer will review and activate your profile.")
+                    .setPositiveButton("OK") { _, _ ->
                         finish()
                     }
                     .setCancelable(false)
