@@ -36,12 +36,60 @@ class JobCompletionActivity : AppCompatActivity() {
 
         setupUI()
         setupListeners()
+        fetchReservationEnergy()
     }
 
     private fun setupUI() {
         val operatorNic = sessionManager.getUserNic() ?: "OPERATOR"
         binding.tvScannedToken.text = qrToken
         binding.etOperatorNic.setText(operatorNic)
+    }
+
+    /**
+     * Extracts the reservationId from the QR token and fetches the actual reservation
+     * from the API to pre-fill the Delivered Energy field with the prosumer's requested amount.
+     *
+     * QR token format: "reservationId|prosumerNic|stationId|slotId|timestamp#hmacSignature"
+     */
+    private fun fetchReservationEnergy() {
+        val reservationId = extractReservationId(qrToken)
+        if (reservationId.isNullOrBlank()) {
+            Toast.makeText(this, "Could not parse reservation ID from QR token.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        binding.progressBar.visibility = View.VISIBLE
+        binding.btnFinalizeTransfer.isEnabled = false
+
+        lifecycleScope.launch {
+            val result = reservationRepository.getReservationById(reservationId)
+            binding.progressBar.visibility = View.GONE
+            binding.btnFinalizeTransfer.isEnabled = true
+
+            result.onSuccess { reservation ->
+                // Pre-fill with the prosumer's requested energy amount
+                binding.etDeliveredEnergy.setText(reservation.energyAmountKW.toString())
+            }.onFailure {
+                // If fetch fails, leave the field empty for manual operator entry
+                Toast.makeText(
+                    this@JobCompletionActivity,
+                    "Could not fetch reservation details. Please enter energy manually.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    /**
+     * Parses the reservationId from the QR payload token.
+     * Expected format: "reservationId|prosumerNic|stationId|slotId|timestamp#hmacSignature"
+     */
+    private fun extractReservationId(token: String): String? {
+        // Split on '#' to separate data from HMAC signature
+        val dataPart = token.split("#").firstOrNull() ?: return null
+        // Split data on '|' — first segment is the reservationId
+        val segments = dataPart.split("|")
+        return if (segments.isNotEmpty()) segments[0].trim() else null
     }
 
     private fun setupListeners() {
@@ -107,3 +155,4 @@ class JobCompletionActivity : AppCompatActivity() {
         }
     }
 }
+

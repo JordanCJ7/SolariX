@@ -115,8 +115,7 @@
                         android:id="@+id/etDeliveredEnergy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:text="10.0" />
+                        android:inputType="numberDecimal" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Operational Notes Field -->
@@ -137,8 +136,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
-                        android:maxLines="3"
-                        android:text="Verified on-site metering and successfully executed energy transfer." />
+                        android:maxLines="3" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Verify and Finalize Button -->
