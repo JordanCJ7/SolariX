@@ -124,7 +124,7 @@ const ReservationMonitor = ({
           </div>
 
           <div className="flex items-center rounded-xl bg-slate-900 p-1 border border-slate-800 text-xs font-medium">
-            {['ALL', 'Approved', 'Completed', 'Cancelled'].map((status) => (
+            {['ALL', 'Pending', 'Approved', 'Completed', 'Cancelled'].map((status) => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
