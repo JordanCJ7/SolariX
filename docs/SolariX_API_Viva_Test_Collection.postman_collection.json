@@ -1,0 +1,478 @@
+{
+	"info": {
+		"_postman_id": "solarix-complete-viva-test-suite",
+		"name": "SolariX Smart Solar Microgrid — Complete Test Suite",
+		"description": "Comprehensive API verification collection for SolariX SE4040 viva defense. Covers 3 User Logins, Station Management, Batch Slot Generation, 7-Day & 12-Hour Business Rules, Approval Lifecycle, and QR Verification.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5119",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "operatorToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "prosumerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testStationId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testSlotId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testReservationId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "testQrToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication (3 Distinct Roles)",
+			"item": [
+				{
+					"name": "1.1 Login - Backoffice Administrator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('User is Backoffice Admin', function () {",
+									"    pm.expect(data.role).to.eql('Backoffice');",
+									"});",
+									"pm.collectionVariables.set('adminToken', data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"admin@solarix.com\",\n  \"password\": \"Admin@123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "1.2 Login - Grid Operator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('User is Grid Operator', function () {",
+									"    pm.expect(data.role).to.eql('GridOperator');",
+									"});",
+									"pm.collectionVariables.set('operatorToken', data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"operator@solarix.com\",\n  \"password\": \"Operator@123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "1.3 Login - Solar Prosumer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('User is Prosumer', function () {",
+									"    pm.expect(data.role).to.eql('Prosumer');",
+									"});",
+									"pm.collectionVariables.set('prosumerToken', data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"prosumer@solarix.com\",\n  \"password\": \"Prosumer@123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Station & Slot Management",
+			"item": [
+				{
+					"name": "2.1 Get Active Stations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var stations = pm.response.json();",
+									"pm.test('Stations list is not empty', function () {",
+									"    pm.expect(stations.length).to.be.above(0);",
+									"});",
+									"pm.collectionVariables.set('testStationId', stations[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/stations?activeOnly=true",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "stations"],
+							"query": [
+								{
+									"key": "activeOnly",
+									"value": "true"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "2.2 Batch Generate Daily Slots (Operational Hours)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var slots = pm.response.json();",
+									"if (slots.length > 0) {",
+									"    pm.collectionVariables.set('testSlotId', slots[0].id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"stationId\": \"{{testStationId}}\",\n  \"targetDate\": \"2026-10-14T00:00:00Z\",\n  \"slotDurationMinutes\": 60,\n  \"slotCapacityKW\": 25.0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/slots/generate-daily",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "slots", "generate-daily"]
+						}
+					}
+				},
+				{
+					"name": "2.3 Get Available Slots with Quota",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var slots = pm.response.json();",
+									"pm.expect(slots.length).to.be.above(0);",
+									"pm.collectionVariables.set('testSlotId', slots[0].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/slots/station/{{testStationId}}?date=2026-10-14",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "slots", "station", "{{testStationId}}"],
+							"query": [
+								{
+									"key": "date",
+									"value": "2026-10-14"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Booking Lifecycle & Business Rules",
+			"item": [
+				{
+					"name": "3.1 Create Booking -> Starts in Pending",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201 Created', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('Booking is created in Pending state', function () {",
+									"    pm.expect(data.status).to.eql('Pending');",
+									"});",
+									"pm.collectionVariables.set('testReservationId', data.id);",
+									"pm.collectionVariables.set('testQrToken', data.qrCodeToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prosumerNIC\": \"200163999582\",\n  \"stationId\": \"{{testStationId}}\",\n  \"slotId\": \"{{testSlotId}}\",\n  \"energyAmountKW\": 5.0,\n  \"tradeType\": \"Charge\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations"]
+						}
+					}
+				},
+				{
+					"name": "3.2 Rule Check: 7-Day Limit Violation (Expect 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400 Bad Request', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('Error mentions 7 days window', function () {",
+									"    pm.expect(data.message).to.include('7 days');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prosumerNIC\": \"200163999582\",\n  \"stationId\": \"{{testStationId}}\",\n  \"slotId\": \"{{testSlotId}}\",\n  \"energyAmountKW\": 5.0,\n  \"tradeType\": \"DropOff\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations"]
+						}
+					}
+				},
+				{
+					"name": "3.3 Grid Operator Approves Pending Reservation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('Status transitioned to Approved', function () {",
+									"    pm.expect(data.status).to.eql('Approved');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations/{{testReservationId}}/approve?approverNic=GO2000000002",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations", "{{testReservationId}}", "approve"],
+							"query": [
+								{
+									"key": "approverNic",
+									"value": "GO2000000002"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "3.4 Grid Operator Scans QR & Finalizes Transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('Status is Completed', function () {",
+									"    pm.expect(data.status).to.eql('Completed');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"qrToken\": \"{{testQrToken}}\",\n  \"operatorId\": \"GO2000000002\",\n  \"deliveredEnergyKW\": 5.0,\n  \"operatorNotes\": \"Verified and energy transferred successfully.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations/verify-and-complete",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations", "verify-and-complete"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Operational Dashboard Metrics",
+			"item": [
+				{
+					"name": "4.1 Get Dashboard Live Counts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200 OK', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"var data = pm.response.json();",
+									"pm.test('Has pending and approved future counts', function () {",
+									"    pm.expect(data).to.have.property('pendingReservationsCount');",
+									"    pm.expect(data).to.have.property('approvedFutureReservationsCount');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservations/dashboard-summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reservations", "dashboard-summary"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
