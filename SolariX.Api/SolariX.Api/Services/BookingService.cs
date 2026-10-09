@@ -548,6 +548,79 @@ namespace SolariX.Api.Services
             return newSlots.Select(MapSlotToResponse).ToList();
         }
 
+        public async Task<SlotResponse> UpdateSlotAsync(string slotId, UpdateSlotRequest request, string callerNic)
+        {
+            // Inline: Validates caller is Backoffice or GridOperator, ensures new capacity does not drop below already-booked energy, and persists slot changes.
+            var cleanNic = callerNic.Trim().ToUpperInvariant();
+            var callerUser = await _context.Users.Find(u => u.NIC == cleanNic).FirstOrDefaultAsync();
+            if (callerUser == null || (callerUser.Role != UserRole.Backoffice && callerUser.Role != UserRole.GridOperator))
+            {
+                throw new UnauthorizedAccessException("Forbidden: Only Backoffice officers and Grid Operators are authorized to update energy booking slots.");
+            }
+
+            var slot = await _context.EnergyBookingSlots.Find(s => s.Id == slotId).FirstOrDefaultAsync();
+            if (slot == null)
+            {
+                throw new KeyNotFoundException($"Energy Booking Slot with ID '{slotId}' was not found.");
+            }
+
+            if (!Enum.TryParse<SlotStatus>(request.Status, true, out var parsedStatus))
+            {
+                throw new InvalidOperationException($"Invalid slot status '{request.Status}'. Allowed values: Available, Booked, Blocked.");
+            }
+
+            // Calculate energy already committed (MaxCapacity - AvailableCapacity = booked amount)
+            var bookedKW = slot.MaxCapacityKW - slot.AvailableCapacityKW;
+            if (request.MaxCapacityKW < bookedKW)
+            {
+                throw new InvalidOperationException($"Cannot reduce capacity below the already-booked amount. Currently {bookedKW:F1} kW is reserved against this slot.");
+            }
+
+            // Recalculate available capacity proportionally
+            var newAvailable = request.MaxCapacityKW - bookedKW;
+
+            var update = Builders<EnergyBookingSlot>.Update
+                .Set(s => s.MaxCapacityKW, request.MaxCapacityKW)
+                .Set(s => s.AvailableCapacityKW, newAvailable)
+                .Set(s => s.Status, parsedStatus)
+                .Set(s => s.UpdatedAt, DateTime.UtcNow);
+
+            await _context.EnergyBookingSlots.UpdateOneAsync(s => s.Id == slotId, update);
+
+            slot.MaxCapacityKW = request.MaxCapacityKW;
+            slot.AvailableCapacityKW = newAvailable;
+            slot.Status = parsedStatus;
+            slot.UpdatedAt = DateTime.UtcNow;
+
+            return MapSlotToResponse(slot);
+        }
+
+        public async Task DeleteSlotAsync(string slotId, string callerNic)
+        {
+            // Inline: Validates caller is Backoffice or GridOperator, blocks deletion when an Approved reservation references this slot, and removes the slot document.
+            var cleanNic = callerNic.Trim().ToUpperInvariant();
+            var callerUser = await _context.Users.Find(u => u.NIC == cleanNic).FirstOrDefaultAsync();
+            if (callerUser == null || (callerUser.Role != UserRole.Backoffice && callerUser.Role != UserRole.GridOperator))
+            {
+                throw new UnauthorizedAccessException("Forbidden: Only Backoffice officers and Grid Operators are authorized to delete energy booking slots.");
+            }
+
+            var slot = await _context.EnergyBookingSlots.Find(s => s.Id == slotId).FirstOrDefaultAsync();
+            if (slot == null)
+            {
+                throw new KeyNotFoundException($"Energy Booking Slot with ID '{slotId}' was not found.");
+            }
+
+            // Block deletion if any active (Approved) reservation references this slot
+            var activeReservation = await _context.EnergyReservations.Find(r => r.SlotId == slotId && r.Status == ReservationStatus.Approved).FirstOrDefaultAsync();
+            if (activeReservation != null)
+            {
+                throw new InvalidOperationException($"Cannot delete this slot because it has an active (Approved) reservation '{activeReservation.ReservationNumber}'. Cancel or complete the reservation first.");
+            }
+
+            await _context.EnergyBookingSlots.DeleteOneAsync(s => s.Id == slotId);
+        }
+
         private static ReservationResponse MapToResponse(EnergyReservation res, string stationName)
         {
             // Inline: Transforms internal EnergyReservation entity into client ReservationResponse DTO.

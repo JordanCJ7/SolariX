@@ -123,6 +123,34 @@ const SlotManagement = () => {
     }
   };
 
+  // Update slot handler
+  const handleUpdateSlot = async (slotId, data) => {
+    try {
+      await reservationsApi.updateSlot(slotId, data, user?.nic || 'OPERATOR');
+      setToast({
+        type: 'success',
+        message: 'Slot updated successfully.',
+      });
+      fetchSlots(selectedStationId, selectedDate);
+    } catch (err) {
+      setToast({ type: 'error', message: err.message || 'Failed to update slot.' });
+    }
+  };
+
+  // Delete slot handler
+  const handleDeleteSlot = async (slotId) => {
+    try {
+      await reservationsApi.deleteSlot(slotId, user?.nic || 'OPERATOR');
+      setToast({
+        type: 'success',
+        message: 'Slot deleted successfully.',
+      });
+      fetchSlots(selectedStationId, selectedDate);
+    } catch (err) {
+      setToast({ type: 'error', message: err.message || 'Failed to delete slot.' });
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {toast && <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />}
@@ -148,6 +176,8 @@ const SlotManagement = () => {
         selectedDate={selectedDate}
         onDateChange={(d) => setSelectedDate(d)}
         onGenerateDailySlots={handleGenerateDailySlots}
+        onUpdateSlot={handleUpdateSlot}
+        onDeleteSlot={handleDeleteSlot}
       />
 
       {/* Live Reservation Monitor */}

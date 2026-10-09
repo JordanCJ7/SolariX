@@ -40,4 +40,14 @@ export const reservationsApi = {
   generateDailySlots: (data) => {
     return axiosClient.post('/slots/generate-daily', data);
   },
+  updateSlot: (slotId, data, callerNic) => {
+    return axiosClient.put(`/slots/${slotId}`, data, {
+      params: { callerNic },
+    });
+  },
+  deleteSlot: (slotId, callerNic) => {
+    return axiosClient.delete(`/slots/${slotId}`, {
+      params: { callerNic },
+    });
+  },
 };

@@ -40,6 +40,15 @@ namespace SolariX.Api.DTOs
         public double SlotCapacityKW { get; set; } = 25.0;
     }
 
+    public class UpdateSlotRequest
+    {
+        [Range(1, 10000)]
+        public double MaxCapacityKW { get; set; }
+
+        [Required]
+        public string Status { get; set; } = string.Empty;
+    }
+
     public class SlotResponse
     {
         public string Id { get; set; } = string.Empty;

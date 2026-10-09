@@ -1,7 +1,7 @@
 // ============================================================================
 // File: SlotsController.cs
 // Project: SolariX - Smart Solar Microgrid Trading System
-// Description: API controller for querying available time slots and scheduling battery storage intervals.
+// Description: API controller for querying, creating, updating, and deleting energy booking slots and scheduling battery storage intervals.
 // Module: SE4040 Enterprise Application Development
 // ============================================================================
 
@@ -77,6 +77,81 @@ namespace SolariX.Api.Controllers
             catch (KeyNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Updates the maximum capacity and status of an existing energy booking slot.
+        /// </summary>
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(SlotResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateSlot(string id, [FromBody] UpdateSlotRequest request, [FromQuery] string callerNic)
+        {
+            // Inline: Delegates to BookingService to enforce role check and capacity validation before updating the slot.
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (string.IsNullOrWhiteSpace(callerNic))
+            {
+                return BadRequest(new { message = "callerNic query parameter is required." });
+            }
+
+            try
+            {
+                var updated = await _bookingService.UpdateSlotAsync(id, request, callerNic);
+                return Ok(updated);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { error = "Forbidden", message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = "InvalidOperation", message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = "NotFound", message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Deletes an energy booking slot. Blocked if the slot has an active (Approved) reservation.
+        /// </summary>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteSlot(string id, [FromQuery] string callerNic)
+        {
+            // Inline: Delegates to BookingService to enforce role check and active-reservation guard before deleting the slot.
+            if (string.IsNullOrWhiteSpace(callerNic))
+            {
+                return BadRequest(new { message = "callerNic query parameter is required." });
+            }
+
+            try
+            {
+                await _bookingService.DeleteSlotAsync(id, callerNic);
+                return NoContent();
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { error = "Forbidden", message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = "InvalidOperation", message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = "NotFound", message = ex.Message });
             }
         }
     }

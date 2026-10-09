@@ -25,5 +25,7 @@ namespace SolariX.Api.Services
         Task<List<SlotResponse>> GetAvailableSlotsAsync(string stationId, DateTime? date = null);
         Task<SlotResponse> CreateSlotAsync(CreateSlotRequest request);
         Task<List<SlotResponse>> GenerateDailySlotsAsync(GenerateDailySlotsRequest request);
+        Task<SlotResponse> UpdateSlotAsync(string slotId, UpdateSlotRequest request, string callerNic);
+        Task DeleteSlotAsync(string slotId, string callerNic);
     }
 }
