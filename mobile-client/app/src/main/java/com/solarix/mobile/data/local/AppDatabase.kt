@@ -5,12 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.solarix.mobile.data.local.entities.CachedBookingEntity
+import com.solarix.mobile.data.local.entities.CachedStationEntity
 import com.solarix.mobile.data.local.entities.UserEntity
 
-@Database(entities = [UserEntity::class, CachedBookingEntity::class], version = 1, exportSchema = false)
+@Database(entities = [UserEntity::class, CachedBookingEntity::class, CachedStationEntity::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun bookingDao(): BookingDao
+    abstract fun stationDao(): StationDao
 
     companion object {
         @Volatile
